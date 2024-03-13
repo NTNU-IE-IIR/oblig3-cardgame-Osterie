@@ -10,7 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -43,6 +45,7 @@ public class CardGameView extends Application{
 
         
         Scene scene = new Scene(rootNode, 500, 500);
+        scene.getStylesheets().add(getClass().getResource("resources/style.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("MVC exmaple");
         stage.show();
@@ -79,9 +82,12 @@ public class CardGameView extends Application{
         VBox infoAboutHandArea = new VBox();
         infoAboutHandArea.setAlignment(Pos.CENTER);
         rootNode.setBottom(infoAboutHandArea);
+        infoAboutHandArea.setSpacing(10);
 
-        HBox horizontalContainer = new HBox();
+        FlowPane horizontalContainer = new FlowPane();
         infoAboutHandArea.getChildren().add(horizontalContainer);
+
+
 
         Label sumOfFacesLabel = new Label("Sum of faces: ");
         horizontalContainer.getChildren().add(sumOfFacesLabel);
