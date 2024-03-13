@@ -22,12 +22,12 @@ public class DeckOfCards {
         this.shuffle();
     }
 
-    public Collection<PlayingCard> dealHand(int numberOfCards){
+    public Hand dealHand(int numberOfCards){
 
-        ArrayList<PlayingCard> hand = new ArrayList<PlayingCard>();
+        Hand hand = new Hand();
         for (int i = 0; i < numberOfCards; i++) {
             // Removes card from deck. This is good if multiple players want to play against eachother.
-            hand.add(deck.remove(0));
+            hand.addCard(deck.remove(0));
         }
 
         return hand;

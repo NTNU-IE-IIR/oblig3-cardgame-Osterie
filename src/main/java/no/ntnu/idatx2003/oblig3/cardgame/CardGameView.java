@@ -8,55 +8,38 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CardGameView extends Application{
     private CardGameController controller;
 
-    private HBox centerContainer;
+    private HBox cardsContainer;
+
+    private BorderPane rootNode;
+    
+    private TextField sumOfFacesField;
+    private TextField cardsOfHeartField;
+    private TextField isFlushField;
+    private TextField hasQueenOfSpadesField;
 
     public CardGameView() {
     }
 
     @Override
     public void start(Stage stage) {
-        
         this.controller = new CardGameController(this);
         
-        BorderPane rootNode = new BorderPane();
-        
-        this.centerContainer = new HBox();
-        this.centerContainer.setAlignment(Pos.CENTER);
-        rootNode.setCenter(this.centerContainer);
+        rootNode = new BorderPane();
 
-        VBox rightContainer = new VBox();
-        rightContainer.setAlignment(Pos.CENTER);
-        rootNode.setRight(rightContainer);
+        this.createCardDisplayArea();
+        this.createDealCheckHandArea();
+        this.createInfoAboutHandArea();
 
-        Button dealHandButton = new Button("Deal hand");
-        dealHandButton.setOnAction((ActionEvent event) -> {
-            this.controller.DealHand();
-        });
-        rightContainer.getChildren().add(dealHandButton);
-
-        
-        Button checkHandButton = new Button("Check hand");
-        checkHandButton.setOnAction((ActionEvent event) -> {
-            // controller.drawCard();
-        });
-        rightContainer.getChildren().add(checkHandButton);
-
-
-
-
-
-
-        Label CardExample = new Label("c1");
-        this.centerContainer.getChildren().add(CardExample);
-        this.centerContainer.setSpacing(10);
 
         
         Scene scene = new Scene(rootNode, 500, 500);
@@ -65,11 +48,96 @@ public class CardGameView extends Application{
         stage.show();
     }
 
-    public void SetHand(Collection<PlayingCard> hand){
-        this.centerContainer.getChildren().clear();
-        for (PlayingCard card : hand) {
+    private void createCardDisplayArea() {
+        this.cardsContainer = new HBox();
+        this.cardsContainer.setAlignment(Pos.CENTER);
+        rootNode.setCenter(this.cardsContainer);
+        this.cardsContainer.setSpacing(10);
+    }
+
+    private void createDealCheckHandArea() {
+        VBox dealCheckHand = new VBox();
+        dealCheckHand.setAlignment(Pos.CENTER);
+        rootNode.setRight(dealCheckHand);
+
+        Button dealHandButton = new Button("Deal hand");
+        dealHandButton.setOnAction((ActionEvent event) -> {
+            this.controller.dealHand();
+        });
+        dealCheckHand.getChildren().add(dealHandButton);
+
+        
+        Button checkHandButton = new Button("Check hand");
+        checkHandButton.setOnAction((ActionEvent event) -> {
+            controller.analyzeHand();
+        });
+        dealCheckHand.getChildren().add(checkHandButton);
+    }
+
+    private void createInfoAboutHandArea() {
+
+        VBox infoAboutHandArea = new VBox();
+        infoAboutHandArea.setAlignment(Pos.CENTER);
+        rootNode.setBottom(infoAboutHandArea);
+
+        HBox horizontalContainer = new HBox();
+        infoAboutHandArea.getChildren().add(horizontalContainer);
+
+        Label sumOfFacesLabel = new Label("Sum of faces: ");
+        horizontalContainer.getChildren().add(sumOfFacesLabel);
+
+        this.sumOfFacesField = new TextField();
+        this.sumOfFacesField.setText("");
+        this.sumOfFacesField.setEditable(false);
+        horizontalContainer.getChildren().add(this.sumOfFacesField);
+
+        Label cardsOfHeartLabel = new Label("Cards of heart: ");
+        horizontalContainer.getChildren().add(cardsOfHeartLabel);
+
+        this.cardsOfHeartField = new TextField();
+        this.cardsOfHeartField.setText("");
+        this.cardsOfHeartField.setEditable(false);
+        horizontalContainer.getChildren().add(this.cardsOfHeartField);
+
+        Label isFlushLabel = new Label("Flush: ");
+        horizontalContainer.getChildren().add(isFlushLabel);
+
+        this.isFlushField = new TextField();
+        this.isFlushField.setText("");
+        this.isFlushField.setEditable(false);
+        horizontalContainer.getChildren().add(this.isFlushField);
+
+        Label hasQueenOfSpadesLabel = new Label("Queen of spades: ");
+        horizontalContainer.getChildren().add(hasQueenOfSpadesLabel);
+
+        this.hasQueenOfSpadesField = new TextField();
+        this.hasQueenOfSpadesField.setText("");
+        this.hasQueenOfSpadesField.setEditable(false);
+        horizontalContainer.getChildren().add(this.hasQueenOfSpadesField);
+    }
+
+    public void setSumOfFaces(int sumOfFaces){
+        this.sumOfFacesField.setText(Integer.toString(sumOfFaces));
+    }
+
+    public void setCardsOfHeart(String cardsOfHeart){
+        this.cardsOfHeartField.setText(cardsOfHeart);
+    }
+
+    public void setIsFlush(boolean isFlush){
+        this.isFlushField.setText(Boolean.toString(isFlush));
+    }
+
+    public void setHasQueenOfSpades(boolean hasQueenOfSpades){
+        this.hasQueenOfSpadesField.setText(Boolean.toString(hasQueenOfSpades));
+    }
+
+    // TODO if this were to follow best practices and such, i would instead give a collection of string instead of playingCard, but i will not change this.
+    public void setHand(Hand hand){
+        this.cardsContainer.getChildren().clear();
+        for (PlayingCard card : hand.getCards()) {
             Label cardLabel = new Label(card.getAsString());
-            this.centerContainer.getChildren().add(cardLabel);
+            this.cardsContainer.getChildren().add(cardLabel);
         }
     }
 
